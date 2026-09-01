@@ -13,10 +13,10 @@ It provides reproducible pipeline for the **Python + Java + C++** experiments us
 
 ## 📖 Table of Contents
 
-- [Docker Image](#docker-image-self-contained-recommended)
-  - [Apple Silicon (arm64) hosts](#apple-silicon-arm64-hosts)
-  - [Timeout configuration](#timeout-configuration)
-- [Quick Start](#quick-start)
+- [Docker Image](#-docker-image-self-contained-recommended)
+  - [Apple Silicon (arm64) hosts](#-apple-silicon-arm64-hosts)
+  - [Timeout configuration](#️-timeout-configuration)
+- [Quick Start](#-quick-start)
   - [Step 1: Installation](#step-1-installation)
   - [Step 2: Python-only smoke test](#step-2-python-only-smoke-test-recommended-first-check)
   - [Step 3: Prepare the Expected Environment](#step-3-prepare-the-expected-environment)
