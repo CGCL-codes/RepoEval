@@ -1,0 +1,89 @@
+{
+  "metadata": {
+    "schema_version": 3,
+    "description": "Minimal reproducible Python/Java/C++ example targets for the artifact package.",
+    "notes": [
+      "prebuilt_seed_base64 is used in prebuilt example mode",
+      "switch to --mode llm to use live model generation",
+      "embedded snippets allow prompt generation even when source files are not mounted locally",
+      "java/cpp use the standard oss-fuzz layout under <repo-root>/oss-fuzz",
+      "python uses bundled test scripts under tools/python_tests/",
+      "python uses a fixed-version interpreter and direct test files instead of docker coverage runners"
+    ]
+  },
+  "targets": [
+    {
+      "id": "1",
+      "language": "python",
+      "project": "sqlparse",
+      "fuzz_target": "test_parse.py",
+      "target_file": "utils.py",
+      "target_line": 96,
+      "target_line_spec": "utils.py:96",
+      "target_symbol": "sqlparse.utils.imt",
+      "target_source_path": "./python_packages/sqlparse",
+      "test_script_path": "./tools/python_tests/test_parse.py",
+      "call_chain": [
+        "sqlparse.__init__.parse",
+        "sqlparse.__init__.parsestream",
+        "sqlparse.engine.filter_stack.FilterStack.run",
+        "sqlparse.engine.grouping.group",
+        "sqlparse.engine.grouping.group_over",
+        "sqlparse.utils.imt"
+      ],
+      "target_source_snippet": "    88:     \"\"\"\n    89:     if token is None:\n    90:         return False\n    91:     if i and isinstance(token, i):\n    92:         return True\n    93:     if m:\n    94:         if isinstance(m, list):\n    95:             if any(token.match(*pattern) for pattern in m):\n>>>  96:                 return True\n    97:         elif token.match(*m):\n    98:             return True\n    99:     if t:\n   100:         if isinstance(t, list):\n   101:             if any(token.ttype in ttype for ttype in t):\n   102:                 return True\n   103:         elif token.ttype in t:\n   104:             return True",
+      "single_file_snippet": "File context for sqlparse/utils.py around sqlparse.utils.imt:\n    88:     \"\"\"\n    89:     if token is None:\n    90:         return False\n    91:     if i and isinstance(token, i):\n    92:         return True\n    93:     if m:\n    94:         if isinstance(m, list):\n    95:             if any(token.match(*pattern) for pattern in m):\n>>>  96:                 return True\n    97:         elif token.match(*m):\n    98:             return True\n    99:     if t:\n   100:         if isinstance(t, list):\n   101:             if any(token.ttype in ttype for ttype in t):\n   102:                 return True\n   103:         elif token.ttype in t:\n   104:             return True",
+      "agent_context_snippet": "Repository context for sqlparse:\n- Entry point: sqlparse.parse\n- The parser calls FilterStack.run and grouping.group before reaching sqlparse.utils.imt.\n- The target is in utils.py and evaluates token type / match predicates.\n- Inputs should be compact SQL strings that produce real parsed token streams.",
+      "harness_label": "test file snippet",
+      "test_script_snippet": "#!/usr/bin/python3\nimport sys\nimport sqlparse\n\ndef test_one_input(data: bytes):\n    try:\n        sql_string = data.decode('utf-8', errors='ignore')\n        sqlparse.parse(sql_string)\n    except RecursionError:\n        pass\n\ndef main():\n    input_file = sys.argv[1]\n    with open(input_file, 'rb') as f:\n        input_data = f.read()\n    test_one_input(input_data)\n    print(f\"Successfully processed input file: {input_file}\")\n\nif __name__ == \"__main__\":\n    main()\n",
+      "package_name": "sqlparse",
+      "package_version": "0.5.5",
+      "prebuilt_seed_base64": "U0VMRUNUIDE7Cg=="
+    },
+    {
+      "id": "2",
+      "language": "java",
+      "project": "jsoup",
+      "fuzz_target": "HtmlFuzzer",
+      "target_file": "org/jsoup/parser/HtmlTreeBuilder.java",
+      "target_line": 528,
+      "target_line_spec": "org/jsoup/parser/HtmlTreeBuilder.java:528",
+      "target_symbol": "org.jsoup.parser.HtmlTreeBuilder.popStackToClose(java.lang.String)",
+      "target_source_path": "./oss-fuzz/build/out/jsoup/src/jsoup/src/main/java",
+      "driver_path": "./oss-fuzz/projects/jsoup/HtmlFuzzer.java",
+      "call_chain": [
+        "HtmlFuzzer.fuzzerTestOneInput(com.code_intelligence.jazzer.api.FuzzedDataProvider)",
+        "org.jsoup.Jsoup.parse(java.lang.String)",
+        "org.jsoup.parser.Parser.parse(java.lang.String,java.lang.String)",
+        "org.jsoup.parser.TreeBuilder.parse(java.io.Reader,java.lang.String,org.jsoup.parser.Parser)",
+        "org.jsoup.parser.TreeBuilder.runParser()",
+        "org.jsoup.parser.TreeBuilder.stepParser()",
+        "org.jsoup.parser.HtmlTreeBuilder.process(org.jsoup.parser.Token)",
+        "org.jsoup.parser.HtmlTreeBuilder.popStackToClose(java.lang.String)"
+      ],
+      "target_source_snippet": " 523:             Element el = pop();\n 524:             if (el.elementIs(elName, NamespaceHtml)) {\n 525:                 return el;\n 526:             }\n 527:         }\n 528:         return null;\n 529:     }\n 530: \n 531:     /** Pops the stack until an element with the supplied name is removed, irrespective of namespace. */\n 532:     @Nullable\n 533:     Element popStackToCloseAnyNamespace(String elName) {",
+      "single_file_snippet": "File context for org/jsoup/parser/HtmlTreeBuilder.java around popStackToClose:\n 523:             Element el = pop();\n 524:             if (el.elementIs(elName, NamespaceHtml)) {\n 525:                 return el;\n 526:             }\n 527:         }\n>>>528:         return null;\n 529:     }\n 530: \n 531:     /** Pops the stack until an element with the supplied name is removed, irrespective of namespace. */\n 532:     @Nullable\n 533:     Element popStackToCloseAnyNamespace(String elName) {",
+      "agent_context_snippet": "Repository context for jsoup:\n- Driver: HtmlFuzzer.fuzzerTestOneInput\n- Parsing path: Jsoup.parse -> Parser.parse -> TreeBuilder.runParser -> HtmlTreeBuilder.process\n- Target method: HtmlTreeBuilder.popStackToClose(String)\n- Plausible inputs are small HTML fragments that build and unwind the parser stack.",
+      "driver_snippet": "// Copyright 2021 Google LLC\n//\n// Licensed under the Apache License, Version 2.0 (the \"License\");\n// you may not use this file except in compliance with the License.\n// You may obtain a copy of the License at\n//\n//      http://www.apache.org/licenses/LICENSE-2.0\n//\n// Unless required by applicable law or agreed to in writing, software\n// distributed under the License is distributed on an \"AS IS\" BASIS,\n// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n// See the License for the specific language governing permissions and\n// limitations under the License.\n//\n////////////////////////////////////////////////////////////////////////////////\n\nimport com.code_intelligence.jazzer.api.FuzzedDataProvider;\n\nimport org.jsoup.Jsoup;\n\npublic class HtmlFuzzer {\n  public static void fuzzerTestOneInput(FuzzedDataProvider data) {\n    Jsoup.parse(data.consumeRemainingAsString());\n  }\n}",
+      "prebuilt_seed_base64": "PGh0bWw+PGJvZHk+PC9ib2R5PjwvaHRtbD4K"
+    },
+    {
+      "id": "3",
+      "language": "cpp",
+      "project": "jansson",
+      "fuzz_target": "json_load_dump_fuzzer",
+      "target_file": "src/load.c",
+      "target_line": 290,
+      "target_line_spec": "src/load.c:290",
+      "target_symbol": "decode_unicode_escape",
+      "target_source_path": "./oss-fuzz/build/out/jansson/src/jansson",
+      "driver_path": "./oss-fuzz/build/out/jansson/src/jansson/test/ossfuzz/json_load_dump_fuzzer.cc",
+      "call_chain": [],
+      "target_source_snippet": "    288:             value += c - 'A' + 10;\n    289:         else\n>>> 290:             return -1;\n    291:     }\n    292: ",
+      "single_file_snippet": "File context for src/load.c around decode_unicode_escape:\n    288:             value += c - 'A' + 10;\n    289:         else\n>>> 290:             return -1;\n    291:     }\n    292: ",
+      "agent_context_snippet": "Repository context for jansson:\n- Driver: LLVMFuzzerTestOneInput in json_load_dump_fuzzer\n- The driver feeds JSON text into json_loadb and may later serialize with json_dumps.\n- The target is in unicode escape decoding logic inside src/load.c.\n- Plausible inputs are compact JSON documents containing escaped characters.",
+      "driver_snippet": "extern \"C\" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)\n{\n  json_error_t error;\n  unsigned char dump_mode;\n\n  if (size < NUM_COMMAND_BYTES)\n    return 0;\n\n  size_t load_flags = *(const size_t*)data;\n  data += sizeof(size_t);\n  size_t dump_flags = *(const size_t*)data;\n  data += sizeof(size_t);\n  dump_mode = data[0];\n  data++;\n  size -= NUM_COMMAND_BYTES;\n\n  const char* text = reinterpret_cast<const char *>(data);\n  json_t* jobj = json_loadb(text, size, load_flags, &error);\n  if (jobj == NULL)\n    return 0;\n\n  char *out = json_dumps(jobj, dump_flags & ~JSON_MAX_INDENT);\n  if (out != NULL)\n    free(out);\n  json_decref(jobj);\n  return 0;\n}",
+      "prebuilt_seed_base64": "e30K"
+    }
+  ]
+}

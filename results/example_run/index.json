@@ -1,0 +1,8 @@
+{
+  "run_root": "results/example_run",
+  "prompt_styles": {
+    "callchain": "results/example_run/callchain",
+    "singlefile": "results/example_run/singlefile",
+    "agentcontext": "results/example_run/agentcontext"
+  }
+}

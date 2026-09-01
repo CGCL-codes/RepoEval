@@ -1,0 +1,6 @@
+openai>=1.0.0
+coverage>=7.0.0
+sqlparse == 0.5.5
+mutagen == 1.47.0
+scapy == 2.6.1
+pycparser == 2.23

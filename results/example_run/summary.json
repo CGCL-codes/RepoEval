@@ -1,0 +1,19 @@
+{
+  "run_root": "results/example_run",
+  "mode": "prebuilt",
+  "prompt_styles": [
+    "callchain",
+    "singlefile",
+    "agentcontext"
+  ],
+  "target_count": 3,
+  "target_ids": [
+    "1",
+    "2",
+    "3"
+  ],
+  "notes": [
+    "Sanitized summary generated from a successful server-side example run.",
+    "Machine-specific absolute paths and user-specific identifiers have been removed from the tracked artifact."
+  ]
+}

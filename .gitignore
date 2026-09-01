@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+config/project_paths_local.py
+results/run_*/
+results/example_[0-9]*/
+oss-fuzz/

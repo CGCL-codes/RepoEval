@@ -1,0 +1,39 @@
+{
+  "run_dir": "results/example_run/agentcontext",
+  "mode": "prebuilt",
+  "model": null,
+  "prompt_style": "agentcontext",
+  "target_count": 3,
+  "results": [
+    {
+      "id": "1",
+      "language": "python",
+      "project": "sqlparse",
+      "target_line_spec": "utils.py:96",
+      "prompt_style": "agentcontext",
+      "seed_source": "prebuilt_seed_base64",
+      "covered": false,
+      "returncode": 0
+    },
+    {
+      "id": "2",
+      "language": "java",
+      "project": "jsoup",
+      "target_line_spec": "org/jsoup/parser/HtmlTreeBuilder.java:528",
+      "prompt_style": "agentcontext",
+      "seed_source": "prebuilt_seed_base64",
+      "covered": false,
+      "returncode": 0
+    },
+    {
+      "id": "3",
+      "language": "cpp",
+      "project": "jansson",
+      "target_line_spec": "src/load.c:290",
+      "prompt_style": "agentcontext",
+      "seed_source": "prebuilt_seed_base64",
+      "covered": false,
+      "returncode": 0
+    }
+  ]
+}
